@@ -75,7 +75,7 @@ while True:
     if action:
         action()
     else:
-        print("Invalid choice!")
+        print("Choix invalide!")
 
 
 conn.close()
