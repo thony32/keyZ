@@ -29,7 +29,7 @@ def get_passwords():
     websites = cursor.fetchall()
 
     if len(websites) > 0:
-        print("Sites web récents:")
+        print("Sites web enregistrés")
         for idx, row in enumerate(websites, start=1):
             print(f"{idx}. {row[0]}")
 
@@ -53,22 +53,67 @@ def get_passwords():
         else:
             print("Choix invalide!")
     else:
-        print("Pas de sites récents trouvés!")
+        print("Aucun site récent trouvé!")
 
+
+def delete_password():
+
+    cursor.execute("SELECT DISTINCT website FROM passwords")
+    websites = cursor.fetchall()
+
+    if len(websites) > 0:
+        print("Sites web enregistrés")
+        for idx, row in enumerate(websites, start=1):
+            print(f"{idx}. {row[0]}")
+
+
+        choice = int(input("Entrez le nombre correspondant au site web: "))
+
+        if choice >= 1 and choice <= len(websites):
+            website = websites[choice - 1][0]
+
+
+            cursor.execute("SELECT * FROM passwords WHERE website=?", (website,))
+            passwords = cursor.fetchall()
+
+            if len(passwords) > 0:
+                print("Mots de passe")
+                for idx, row in enumerate(passwords, start=1):
+                    print(f"{idx}. Nom d'utilisateur: {row[1]}, Mot de passe: {row[2]}")
+
+
+                password_choice = int(input("Entrez le nombre correspondant au mot de passe: "))
+
+                if password_choice >= 1 and password_choice <= len(passwords):
+                    password = passwords[password_choice - 1]
+                    cursor.execute("DELETE FROM passwords WHERE website=? AND username=? AND password=?",
+                                   (password[0], password[1], password[2]))
+                    conn.commit()
+                    print("Mot de passe supprimé avec succès!")
+                else:
+                    print("Choix invalide!")
+            else:
+                print("Aucun mot de passe enregistré sur le site selectionné!")
+        else:
+            print("Choix invalide!")
+    else:
+        print("Aucun site récent trouvé!")
 
 
 while True:
     print("\nGestionnaire de mot de passe")
     print("1. Ajouter un mot de passe")
     print("2. Afficher les mots de passes enregistrés")
-    print("3. Quitter")
+    print("3. Supprimer un mot de passe enregistré")
+    print("4. Quitter")
 
-    choice = input("Entrez votre choix (1-3): ")
+    choice = input("Entrez votre choix (1-4): ")
 
     options = {
         "1": add_password,
         "2": get_passwords,
-        "3": exit
+        "3": delete_password,
+        "4": exit
     }
 
     action = options.get(choice)
