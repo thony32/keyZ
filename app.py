@@ -1,7 +1,10 @@
-from app import create_app
 
-app = create_app()
-app.config['DEBUG'] = True
+from flask import Flask
+
+app = Flask(__name__)
+@app.route('/')
+def hello():
+    return 'Hello, World!'
 
 if __name__ == "__main__":
     app.run(debug=True)
