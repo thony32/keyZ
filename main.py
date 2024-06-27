@@ -178,7 +178,7 @@ while True:
     print("3. Modifier un mot de passe enregistré")
     print("4. Supprimer un mot de passe enregistré")
     print("5. Exporter les mots de passe")
-    print("6. Générer un code QR")
+    print("6. Générer un code Qr")
     print("7. Quitter")
 
     choice = input("Entrez votre choix (1-7): ")
